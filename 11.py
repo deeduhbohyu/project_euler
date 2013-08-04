@@ -21,11 +21,36 @@ def largest_product_in_series():
 		(20,73,35,29,78,31,90,1,74,31,49,71,48,86,81,16,23,57,5,54), \
 		(1,70,54,71,83,51,54,69,16,92,33,48,61,43,52,1,89,19,67,48))
 
-    visited = []
-
-    max_product = helper(0, 0, input, visited)
+    max_product = helper_iter(0, 0, input)
     print max_product
-    print len(visited)
+
+def helper_iter(row, column, input):
+    cur_max = 0
+    count = 0
+    for cur_row in range(row, len(input)):
+        for cur_column in range(column, len(input[cur_row])):
+            count = count + 1
+            if cur_row + 3 < len(input):
+                vert = input[cur_row][cur_column] * input[cur_row + 1][cur_column] * input[cur_row + 2][cur_column] * input[cur_row + 3][cur_column]
+            else:
+                vert = 0
+            
+            if cur_column + 3 < len(input[cur_row]):
+                hort = input[cur_row][cur_column] * input[cur_row][cur_column + 1] * input[cur_row][cur_column + 2] * input[cur_row][cur_column + 3]
+            else:
+                hort = 0
+            
+            if cur_row + 3 < len(input) and cur_column + 3 < len(input[cur_row]):
+                diag_1 = input[cur_row][cur_column] * input[cur_row + 1][cur_column + 1] * input[cur_row + 2][cur_column + 2] * input[cur_row + 3][cur_column + 3]
+            else:
+                diag_1 = 0
+
+            if cur_row > 3 and cur_column + 3 < len(input[cur_row]):
+                diag_2 = input[cur_row][cur_column] * input[cur_row - 1][cur_column + 1] * input[cur_row - 2][cur_column + 2] * input[cur_row - 3][cur_column + 3]
+            else:
+                diag_2 = 0
+            cur_max = max(vert, hort, diag_1, diag_2, cur_max)
+    return cur_max
 
 def helper(row, column, input, visited):
 
